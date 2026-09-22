@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sổ Tay Kế Toán - Tra Cứu Bài Học & Định Khoản</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background-color: #f1f5f9; color: #1e293b; display: flex; flex-direction: column; min-height: 100vh; }
+        
+        /* Header Top */
+        header { background-color: #0f172a; color: white; padding: 12px 16px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 3px solid #0284c7; }
+        .logo { font-size: 18px; font-weight: 700; color: #38bdf8; display: flex; align-items: center; gap: 8px; }
+        
+        /* Search Box */
+        .search-box { position: relative; width: 100%; max-width: 400px; }
+        .search-box input { width: 100%; padding: 8px 14px; border-radius: 8px; border: 1px solid #334155; background-color: #1e293b; color: white; font-size: 14px; outline: none; }
+        .search-box input:focus { border-color: #38bdf8; }
+        .search-box input::placeholder { color: #94a3b8; }
+        
+        /* Main Horizontal Tabs Nav */
+        .main-tabs-wrapper { background-color: #1e293b; border-bottom: 1px solid #334155; padding: 0 12px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .main-tabs { display: flex; gap: 4px; list-style: none; white-space: nowrap; }
+        .tab-btn { background: transparent; border: none; color: #94a3b8; padding: 12px 14px; cursor: pointer; font-weight: 600; font-size: 14px; border-bottom: 3px solid transparent; transition: all 0.2s; }
+        .tab-btn.active { color: #38bdf8; border-bottom-color: #38bdf8; background-color: rgba(56, 189, 248, 0.1); }
+        
+        /* Layout Container */
+        .container { display: flex; flex: 1; max-width: 1400px; margin: 0 auto; width: 100%; padding: 16px; gap: 16px; }
+        
+        /* Sub Sidebar Menu */
+        .sidebar { width: 260px; background-color: white; border-radius: 12px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); height: fit-content; }
+        .sidebar h3 { font-size: 12px; text-transform: uppercase; color: #64748b; margin-bottom: 10px; padding-left: 4px; }
+        .menu-list { list-style: none; }
+        .menu-item { padding: 10px 12px; border-radius: 8px; cursor: pointer; font-size: 14px; margin-bottom: 4px; color: #334155; font-weight: 500; }
+        .menu-item.active { background-color: #e0f2fe; color: #0284c7; font-weight: 600; }
+        
+        /* Content Area */
+        .content { flex: 1; background-color: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); min-width: 0; }
+        .article-title { font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 12px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; word-wrap: break-word; }
+        .article-body { line-height: 1.6; font-size: 14px; color: #334155; word-wrap: break-word; }
+        .article-body h4 { margin: 16px 0 8px 0; color: #0f172a; font-size: 15px; }
+
+        /* Responsive Tables Wrapper */
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 12px 0; }
+        .styled-table { width: 100%; min-width: 500px; border-collapse: collapse; font-size: 13px; text-align: left; }
+        .styled-table th { background-color: #f1f5f9; color: #0f172a; font-weight: 600; padding: 8px 10px; border: 1px solid #cbd5e1; }
+        .styled-table td { padding: 8px 10px; border: 1px solid #e2e8f0; }
+
+        /* Callout Box Example */
+        .box-example { background-color: #f0fdf4; border-left: 4px solid #16a34a; padding: 12px 14px; margin: 14px 0; border-radius: 0 8px 8px 0; }
+        .box-example-title { font-weight: 700; color: #15803d; margin-bottom: 6px; }
+
+        /* Callout Box Tip */
+        .box-tip { background-color: #fffbeb; border-left: 4px solid #d97706; padding: 12px 14px; margin: 14px 0; border-radius: 0 8px 8px 0; }
+        .box-tip-title { font-weight: 700; color: #b45309; margin-bottom: 6px; }
+
+        /* Code/Journal Display Block */
+        .journal-code { background-color: #1e293b; color: #f8fafc; padding: 12px; border-radius: 8px; font-family: monospace; margin: 8px 0; font-size: 13px; overflow-x: auto; white-space: pre-wrap; line-height: 1.4; }
+
+        /* Tối ưu hóa cho Điện thoại (Mobile Styles) */
+        @media (max-width: 768px) {
+            .container { flex-direction: column; padding: 10px; }
+            .sidebar { width: 100%; padding: 10px; }
+            .menu-list { display: flex; overflow-x: auto; gap: 6px; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+            .menu-item { white-space: nowrap; font-size: 13px; padding: 8px 12px; background-color: #f8fafc; border: 1px solid #e2e8f0; }
+            .menu-item.active { background-color: #0284c7; color: white; border-color: #0284c7; }
+            .content { padding: 14px; }
+            .article-title { font-size: 18px; }
+            header { padding: 10px; }
+            .logo { font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Search -->
+    <header>
+        <div class="logo">📖 SỔ TAY KẾ TOÁN TRA CỨU</div>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Tra cứu tài khoản (111, 112...), từ khóa..." oninput="handleSearch()">
+        </div>
+    </header>
+
+    <!-- Main Navigation Tabs -->
+    <div class="main-tabs-wrapper">
+        <nav class="main-tabs" id="mainTabs"></nav>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <h3 id="sidebarHeader">MỤC BÀI HỌC</h3>
+            <ul class="menu-list" id="sidebarMenu"></ul>
+        </aside>
+
+        <!-- Lesson Content Area -->
+        <main class="content" id="lessonContent">
+            <!-- Content rendered by JS -->
+        </main>
+    </div>
+
+    <!-- JavaScript Data -->
+    <script>
+        const accountingData = [
+            {
+                category: "BÀI 1: BẢN CHẤT CỦA KẾ TOÁN",
+                lessons: [
+                    {
+                        id: "b1-lythuyet",
+                        title: "1. Bản chất Kế toán & Quy tắc Nợ - Có",
+                        description: `
+                            <p><b>Mọi nghiệp vụ kế toán đều trả lời 2 câu hỏi:</b></p>
+                            <ul>
+                                <li><b>Tiền/giá trị này đến từ đâu?</b> (Nguồn)</li>
+                                <li><b>Tiền/giá trị này đi về đâu?</b> (Đích)</li>
+                            </ul>
+                            
+                            <h4>Nợ – Có: Đừng sợ, nó chỉ là 2 cái tên!</h4>
+                            <p>Nợ = bên trái | Có = bên phải. Không có nghĩa là "nợ nần" hay "có tiền".</p>
+                            
+                            <h4>Tính chất ghi nhận:</h4>
+                            <div class="table-responsive">
+                                <table class="styled-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Loại tài khoản</th>
+                                            <th>Tăng ghi</th>
+                                            <th>Giảm ghi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>Tài sản (tiền, hàng...)</td><td><b>Nợ</b></td><td>Có</td></tr>
+                                        <tr><td>Nguồn vốn / Nợ phải trả</td><td>Có</td><td><b>Nợ</b></td></tr>
+                                        <tr><td>Vốn chủ sở hữu</td><td>Có</td><td><b>Nợ</b></td></tr>
+                                        <tr><td>Doanh thu</td><td>Có</td><td><b>Nợ</b></td></tr>
+                                        <tr><td>Chi phí</td><td><b>Nợ</b></td><td>Có</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        `,
+                        example: {
+                            title: "💡 VÍ DỤ PHÂN TÍCH LUỒNG TIỀN",
+                            content: "1. Nộp 100tr vào ngân hàng công ty:<br>• Tiền mặt tại quỹ giảm 100tr.<br>• Tiền gửi ngân hàng tăng 100tr.<br><br>2. Mua hàng hóa 50tr chưa trả tiền:<br>• Nợ phải trả người bán tăng 50tr.<br>• Hàng hóa trong kho tăng 50tr."
+                        },
+                        tip: {
+                            title: "⚡ CÂU THẦN CHÚ",
+                            content: "<b>Tài sản + Chi phí:</b> tăng ghi Nợ.<br><b>Nguồn vốn + Doanh thu:</b> tăng ghi Có.<br><b>Nguyên tắc:</b> Tổng Nợ luôn = Tổng Có!"
+                        }
+                    },
+                    {
+                        id: "b1-taikhoan",
+                        title: "2. Danh mục Tài khoản hay dùng",
+                        description: `
+                            <p>Các tài khoản phổ biến nhất cho công ty Thương mại - Dịch vụ:</p>
+                            <div class="table-responsive">
+                                <table class="styled-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Số TK</th>
+                                            <th>Tên tài khoản</th>
+                                            <th>Dùng khi nào?</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td><b>111</b></td><td>Tiền mặt</td><td>Thu/chi tiền mặt</td></tr>
+                                        <tr><td><b>112</b></td><td>Tiền gửi bank</td><td>Thu/chi qua ngân hàng</td></tr>
+                                        <tr><td><b>131</b></td><td>Phải thu khách hàng</td><td>Bán hàng chưa thu tiền</td></tr>
+                                        <tr><td><b>331</b></td><td>Phải trả người bán</td><td>Mua hàng chưa trả tiền</td></tr>
+                                        <tr><td><b>156</b></td><td>Hàng hóa</td><td>Mua hàng nhập kho</td></tr>
+                                        <tr><td><b>632</b></td><td>Giá vốn hàng bán</td><td>Khi xuất bán hàng</td></tr>
+                                        <tr><td><b>511</b></td><td>Doanh thu bán hàng</td><td>Khi bán hàng/dịch vụ</td></tr>
+                                        <tr><td><b>3331</b></td><td>Thuế GTGT phải nộp</td><td>Thuế đầu ra</td></tr>
+                                        <tr><td><b>334</b></td><td>Phải trả người lao động</td><td>Lương nhân viên</td></tr>
+                                        <tr><td><b>642</b></td><td>Chi phí quản lý</td><td>Điện, nước, lương VP...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        `,
+                        example: {
+                            title: "💡 VÍ DỤ BÁN DỊCH VỤ CHƯA THU TIỀN",
+                            content: "Doanh thu 10tr, thuế GTGT 10%, khách chưa trả:",
+                            code: "Nợ 131 : 11.000.000\n   Có 511 : 10.000.000\n   Có 3331:  1.000.000"
+                        }
+                    },
+                    {
+                        id: "b1-baitap",
+                        title: "3. Bài tập & Đáp án chi tiết",
+                        description: `
+                            <p><b>Đề bài:</b> Định khoản 4 nghiệp vụ (VAT 10%):</p>
+                            <ol style="padding-left: 18px; line-height: 1.8;">
+                                <li>Mua hàng nhập kho 20tr, VAT 2tr, chưa trả tiền.</li>
+                                <li>Bán hàng giá vốn 15tr, giá bán 25tr, VAT 2,5tr, khách nợ.</li>
+                                <li>Chi tiền mặt trả lương 8tr.</li>
+                                <li>Khách trả nợ 27,5tr chuyển khoản.</li>
+                            </ol>
+                        `,
+                        example: {
+                            title: "📝 ĐÁP ÁN CHUẨN",
+                            content: "Bút toán định khoản chuẩn:",
+                            code: "1) Nợ 156: 20tr / Nợ 1331: 2tr / Có 331: 22tr\n\n2) Doanh thu: Nợ 131: 27,5tr / Có 511: 25tr / Có 3331: 2,5tr\n   Giá vốn: Nợ 632: 15tr / Có 156: 15tr\n\n3) Nợ 334: 8tr / Có 111: 8tr\n\n4) Nợ 112: 27,5tr / Có 131: 27,5tr"
+                        }
+                    }
+                ]
+            },
+            {
+                category: "BÀI 2: HỆ THỐNG TÀI KHOẢN",
+                lessons: [
+                    {
+                        id: "b2-loai-tk",
+                        title: "1. 9 Loại Tài khoản Kế toán",
+                        description: `
+                            <div class="table-responsive">
+                                <table class="styled-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Loại</th>
+                                            <th>Tên nhóm</th>
+                                            <th>Tăng ghi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>Loại 1 & 2</td><td>Tài sản</td><td><b>Nợ</b></td></tr>
+                                        <tr><td>Loại 3 & 4</td><td>Nợ & Vốn</td><td><b>Có</b></td></tr>
+                                        <tr><td>Loại 5 & 7</td><td>Doanh thu & Thu nhập</td><td><b>Có</b></td></tr>
+                                        <tr><td>Loại 6 & 8</td><td>Chi phí</td><td><b>Nợ</b></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        `,
+                        tip: {
+                            title: "⚡ MẸO NHỚ NHANH",
+                            content: "• Trả gốc vay: Nợ 341 / Có 112<br>• Trả lãi vay: Nợ 635 / Có 112<br>• Trả lương: Nợ 334 / Có 111<br>• Ứng lương: Nợ 141 / Có 111"
+                        }
+                    }
+                ]
+            },
+            {
+                category: "BÀI 3: SỔ NHẬT KÝ CHUNG",
+                lessons: [
+                    {
+                        id: "b3-quychinh",
+                        title: "1. Quy trình Sổ sách",
+                        description: `
+                            <p style="background-color:#e0f2fe; padding: 10px; border-radius: 8px; color: #0284c7; font-weight: 600; text-align: center; font-size: 13px;">
+                                Chứng từ ➔ Nhật ký chung ➔ Sổ cái ➔ Báo cáo tài chính
+                            </p>
+                            <h4>Mẫu Sổ Nhật ký chung:</h4>
+                            <div class="table-responsive">
+                                <table class="styled-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Ngày</th>
+                                            <th>Diễn giải</th>
+                                            <th>Nợ</th>
+                                            <th>Có</th>
+                                            <th>Số tiền</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>01/03</td><td>Rút bank về quỹ</td><td>111</td><td>112</td><td>30.000.000</td></tr>
+                                        <tr><td>02/03</td><td>Mua hàng chưa trả tiền</td><td>156</td><td>331</td><td>20.000.000</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        `
+                    }
+                ]
+            }
+        ];
+
+        let currentCategoryIndex = 0;
+        let currentLessonIndex = 0;
+
+        function renderMainTabs() {
+            const tabsContainer = document.getElementById('mainTabs');
+            tabsContainer.innerHTML = '';
+            accountingData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `tab-btn ${index === currentCategoryIndex ? 'active' : ''}`;
+                btn.textContent = item.category;
+                btn.onclick = () => {
+                    currentCategoryIndex = index;
+                    currentLessonIndex = 0;
+                    renderMainTabs();
+                    renderSidebar();
+                    renderLesson();
+                };
+                tabsContainer.appendChild(btn);
+            });
+        }
+
+        function renderSidebar() {
+            const sidebarContainer = document.getElementById('sidebarMenu');
+            sidebarContainer.innerHTML = '';
+            const currentCategory = accountingData[currentCategoryIndex];
+            document.getElementById('sidebarHeader').textContent = currentCategory.category;
+
+            currentCategory.lessons.forEach((lesson, index) => {
+                const li = document.createElement('li');
+                li.className = `menu-item ${index === currentLessonIndex ? 'active' : ''}`;
+                li.textContent = lesson.title;
+                li.onclick = () => {
+                    currentLessonIndex = index;
+                    renderSidebar();
+                    renderLesson();
+                };
+                sidebarContainer.appendChild(li);
+            });
+        }
+
+        function renderLesson() {
+            const contentContainer = document.getElementById('lessonContent');
+            const lesson = accountingData[currentCategoryIndex].lessons[currentLessonIndex];
+            if (!lesson) return;
+
+            contentContainer.innerHTML = `
+                <h1 class="article-title">${lesson.title}</h1>
+                <div class="article-body">
+                    ${lesson.description}
+                    ${lesson.example ? `
+                        <div class="box-example">
+                            <div class="box-example-title">${lesson.example.title}</div>
+                            <div>${lesson.example.content}</div>${lesson.example.code ? `<div class="journal-code">${lesson.example.code}</div>` : ''}
+                        </div>
+                    ` : ''}
+                    ${lesson.tip ? `
+                        <div class="box-tip">
+                            <div class="box-tip-title">${lesson.tip.title}</div>
+                            <div>${lesson.tip.content}</div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        function handleSearch() {
+            const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
+            if (!keyword) { renderLesson(); return; }
+
+            const contentContainer = document.getElementById('lessonContent');
+            let resultsHTML = `<h1 class="article-title">Kết quả: "${keyword}"</h1><div class="article-body">`;
+            let matchCount = 0;
+
+            accountingData.forEach((category) => {
+                category.lessons.forEach((lesson) => {
+                    const fullText = (lesson.title + ' ' + lesson.description + ' ' + (lesson.example?.content || '')).toLowerCase();
+                    if (fullText.includes(keyword)) {
+                        matchCount++;
+                        resultsHTML += `
+                            <div style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #e2e8f0;">
+                                <h3 style="color:#0f172a; font-size:15px;">${lesson.title}</h3>
+                                <div>${lesson.description}</div>
+                            </div>
+                        `;
+                    }
+                });
+            });
+
+            if (matchCount === 0) resultsHTML += '<p>Không tìm thấy kết quả.</p>';
+            resultsHTML += '</div>';
+            contentContainer.innerHTML = resultsHTML;
+        }
+
+        renderMainTabs();
+        renderSidebar();
+        renderLesson();
+    </script>
+</body>
+</html>
